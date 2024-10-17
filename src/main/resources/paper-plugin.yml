@@ -1,0 +1,10 @@
+name: HideAndSeek
+version: '1.0-SNAPSHOT'
+main: net.tfgames.hide.HideAndSeekTF
+api-version: '1.20'
+dependencies:
+  server:
+    EngineTF:
+      load: BEFORE
+      required: true
+      join-classpath: true

@@ -1,0 +1,14 @@
+PetShop:
+  waiting-spawn:
+    x: 0.25
+    y: 64.0
+    z: -0.25
+    yaw: 0.2
+    pitch: -3.0
+Escola:
+  waiting-spawn:
+    x: 0.5
+    y: 64.0
+    z: 0.5
+    yaw: 90.2
+    pitch: -3.0
