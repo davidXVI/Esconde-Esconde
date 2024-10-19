@@ -32,7 +32,7 @@ public class CombatListener implements Listener {
                     player.teleportAsync(game.getConfig().getWaitingSpawn()).thenRun(game::checkWinner);
                     arena.resetPlayer(player);
 
-                    game.giveInventory(player);//
+                    game.giveInventory(player);
                 }
             }
         }

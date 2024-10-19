@@ -199,14 +199,14 @@ public class HideAndSeek extends Game {
             getHiderTeam().removePlayers(player);
             getSeekerTeam().addPlayers(player);
 
-            player.showTitle(Title.title(mm.deserialize("<gray>Você está: <red>PROCURANDO"), mm.deserialize("<gray>ᴇɴᴄᴏɴᴛʀᴇ ᴏѕ ᴏᴜᴛʀᴏѕ ᴊᴏɢᴀᴅᴏʀᴇѕ")));
+            player.showTitle(Title.title(mm.deserialize("<white>Você está: <red>PROCURANDO"), mm.deserialize("<white>ᴇɴᴄᴏɴᴛʀᴇ ᴏѕ ᴏᴜᴛʀᴏѕ ᴊᴏɢᴀᴅᴏʀᴇѕ")));
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 2.0F, 2.0F);
         }
         else {
             getSeekerTeam().removePlayers(player);
             getHiderTeam().addPlayers(player);
 
-            player.showTitle(Title.title(mm.deserialize("<gray>Você está: <green>ESCONDENDO"), mm.deserialize("<gray>ᴇѕᴄᴏɴᴅᴀ-ѕᴇ ᴅᴏ ᴘʀᴏᴄᴜʀᴀᴅᴏʀ")));
+            player.showTitle(Title.title(mm.deserialize("<white>Você está: <green>ESCONDENDO"), mm.deserialize("<white>ᴇѕᴄᴏɴᴅᴀ-ѕᴇ ᴅᴏ ᴘʀᴏᴄᴜʀᴀᴅᴏʀ")));
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 2.0F, 2.0F);
         }
 
