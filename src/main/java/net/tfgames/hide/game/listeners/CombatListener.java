@@ -13,6 +13,8 @@ public class CombatListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
+        if (e.isCancelled()) return;
+
         if (e.getEntity() instanceof Player player) {
             Arena arena = ArenaManager.getArena(player);
 
@@ -29,6 +31,8 @@ public class CombatListener implements Listener {
                     // Handle teleportation and winner check
                     player.teleportAsync(game.getConfig().getWaitingSpawn()).thenRun(game::checkWinner);
                     arena.resetPlayer(player);
+
+                    game.giveInventory(player);
                 }
             }
         }
