@@ -41,6 +41,9 @@ public class HideSidebar implements GameScoreboard {
         sidebar.addUpdatableLine(p -> " \uD83D\uDDE1 Procurando: <green>" + game.getSeekerTeam().size());
         sidebar.addBlankLine();
 
+        sidebar.addConditionalLine(p -> " \uD83C\uDFA3 Encontrados: <green>" + game.getKills(p), game::isSeeker);
+        sidebar.addConditionalLine(p -> " ", game::isSeeker);
+
         sidebar.addUpdatableLine(p -> " ⛨ Função: " + (game.getTeam(p) != null ? game.getTeam(p).getRichName() : "<gray>Nenhuma"));
         sidebar.addLine(" ⛏ Mapa: <green>" + game.getMap());
 

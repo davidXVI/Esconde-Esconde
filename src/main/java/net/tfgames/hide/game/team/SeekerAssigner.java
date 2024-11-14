@@ -36,6 +36,7 @@ public class SeekerAssigner implements TeamAssigner {
 
     @Override
     public void assignTeams(Game game) {
+
         Arena arena = game.getArena();
         HideAndSeek hideAndSeek = (HideAndSeek) game;
 

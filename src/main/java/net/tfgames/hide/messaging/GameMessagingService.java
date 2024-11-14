@@ -3,6 +3,7 @@ package net.tfgames.hide.messaging;
 import lombok.Getter;
 import lombok.Setter;
 import net.tfgames.common.api.game.modes.PackedHideAndSeek;
+import net.tfgames.common.api.game.settings.GameType;
 import net.tfgames.common.api.messaging.DefaultChannels;
 import net.tfgames.common.api.messaging.MessagingChannel;
 import net.tfgames.common.api.messaging.MessagingPacket;
@@ -19,6 +20,7 @@ import net.tfgames.hide.HideAndSeekTF;
 import net.tfgames.hide.game.HideAndSeek;
 import org.bukkit.Bukkit;
 
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -52,7 +54,7 @@ public class GameMessagingService {
                         if (gameCreatePacket.getGame() == null) return;
 
                         if (gameCreatePacket.getGame() instanceof PackedHideAndSeek packet) {
-                            Arena arena = ArenaManager.loadArena(new HideAndSeek(HideAndSeekTF.getInstance(), packet));
+                            Arena arena = ArenaManager.loadArena(new HideAndSeek(EngineTF.getInstance(), packet));
                             UUID uuid = arena.getGameId();
 
                             Bukkit.getScheduler().runTaskTimer(arena.getPlugin(), e -> {
@@ -80,7 +82,7 @@ public class GameMessagingService {
 
                     @Override
                     public String getName() {
-                        return DefaultChannels.GAME_CREATE_REQUEST.toString();
+                        return GameType.HIDE_AND_SEEK.getDisplayTag() + "_" + DefaultChannels.GAME_CREATE_REQUEST;
                     }
                 }
         );

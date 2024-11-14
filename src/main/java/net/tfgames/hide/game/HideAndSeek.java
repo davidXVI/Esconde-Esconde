@@ -9,6 +9,7 @@ import net.tfgames.common.api.game.settings.GameType;
 import net.tfgames.common.api.game.settings.gamerule.GameRule;
 import net.tfgames.engine.arena.ArenaState;
 import net.tfgames.engine.game.Game;
+import net.tfgames.engine.game.modules.GameChat;
 import net.tfgames.engine.team.ArenaTeam;
 import net.tfgames.engine.utils.item.ItemBuilder;
 import net.tfgames.hide.config.HideAndSeekConfig;
@@ -35,6 +36,9 @@ public class HideAndSeek extends Game {
     private PlayingTask playingTask;
     private HideState currentState;
 
+    private Map<UUID, Integer> foundPlayers;
+    private Map<UUID, Integer> timeLived;
+
     public HideAndSeek(Plugin plugin, PackedGame packedGame) {
         super(plugin, packedGame);
 
@@ -43,6 +47,9 @@ public class HideAndSeek extends Game {
 
         this.currentState = HideState.HIDING_TIME;
         this.playingTask = new PlayingTask(plugin, this);
+
+        this.foundPlayers = new HashMap<>();
+        this.timeLived = new HashMap<>();
 
         this.teamAssigner = new SeekerAssigner();
     }
@@ -65,6 +72,7 @@ public class HideAndSeek extends Game {
     //Component Management
     public void setupComponents() {
         this.scoreboard = new HideSidebar(this);
+        this.gameChat = new GameChat();
 
         for (UUID uuid : arena.getPlayers()) {
             Player player = Bukkit.getPlayer(uuid);
@@ -73,6 +81,11 @@ public class HideAndSeek extends Game {
                 player.clearTitle();
             }
         }
+    }
+
+    @Override
+    public Game clone() {
+        return new HideAndSeek(plugin, packedGame);
     }
 
     //Teleport Players
@@ -103,7 +116,7 @@ public class HideAndSeek extends Game {
 
     //Game Management
     public void checkWinner() {
-        //Arena is Empty, end the game with a winner
+        // Arena is Empty, end the game with a winner
         if (arena.getPlayers().isEmpty() || arena.getPlayers().size() == 1) {
             endGame(null);
             return;
@@ -136,7 +149,7 @@ public class HideAndSeek extends Game {
         arena.sendMessage("<gold><bold><st>                                                                 ");
         arena.sendCenteredMessage("<yellow><bold>ᴇѕᴄᴏɴᴅᴇ-ᴇѕᴄᴏɴᴅᴇ");
         arena.sendMessage(" ");
-        arena.sendCenteredMessage("<yellow>Vencedor - " + winner.getRichName());
+        arena.sendCenteredMessage("<white>Vencedor - " + winner.getRichName());
         arena.sendMessage(" ");
         arena.sendMessage("<gold><bold><st>                                                                 ");
 
@@ -187,7 +200,7 @@ public class HideAndSeek extends Game {
         }
 
         ItemStack chestPlate = new ItemBuilder(Material.LEATHER_CHESTPLATE).setColor(armorColor).setName("<yellow>Peitoral").setUnbreakable(true).build();
-        ItemStack boots = new ItemBuilder(Material.LEATHER_BOOTS).setColor(armorColor).setName("<yellow>Bota").addEnchantment(Enchantment.PROTECTION, 4).setUnbreakable(true).build();
+        ItemStack boots = new ItemBuilder(Material.LEATHER_BOOTS).setColor(armorColor).setName("<yellow>Bota").addEnchantment(Enchantment.FEATHER_FALLING, 4).setUnbreakable(true).build();
 
         player.getInventory().setBoots(boots);
         player.getInventory().setChestplate(chestPlate);
@@ -206,11 +219,28 @@ public class HideAndSeek extends Game {
             getSeekerTeam().removePlayers(player);
             getHiderTeam().addPlayers(player);
 
-            player.showTitle(Title.title(mm.deserialize("<white>Você está: <green>ESCONDENDO"), mm.deserialize("<white>ᴇѕᴄᴏɴᴅᴀ-ѕᴇ ᴅᴏ ᴘʀᴏᴄᴜʀᴀᴅᴏʀ")));
+            player.showTitle(Title.title(mm.deserialize("<white>Você está: <blue>ESCONDENDO"), mm.deserialize("<white>ᴇѕᴄᴏɴᴅᴀ-ѕᴇ ᴅᴏ ᴘʀᴏᴄᴜʀᴀᴅᴏʀ")));
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BELL, 2.0F, 2.0F);
         }
 
         giveInventory(player);
+    }
+
+    // Time Lived and Kills Management
+    public void setTimeLived(Player player, int seconds) {
+        timeLived.put(player.getUniqueId(), seconds);
+    }
+
+    public int getTimeLived(Player player) {
+        return timeLived.getOrDefault(player.getUniqueId(), 0);
+    }
+
+    public void addKill(Player player) {
+        foundPlayers.put(player.getUniqueId(), getKills(player) + 1);
+    }
+
+    public int getKills(Player player) {
+        return foundPlayers.getOrDefault(player.getUniqueId(), 0);
     }
 
     // Team Utils
